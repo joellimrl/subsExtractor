@@ -17,3 +17,15 @@ create `.env` with SHOW_PATH to your main directory of shows
 ```
 npm start [insert folder name]
 ```
+
+# Extract all files to parent directory
+
+Extracts all files in sub-folders to parent directory
+
+Does not work on sub-sub-folders (Can run this multiple times)
+
+```Note: Because this is slightly more dangerous, there will be a prompt required before execution```
+
+```
+npm run extractAll [Full path name]
+```
