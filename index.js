@@ -12,19 +12,36 @@ const moveFile = (oldPath, newPath) => {
 };
 
 const main = () => {
-	const mainPathToShows = `${process.env.SHOW_PATH}/` || "C:/Shows";
-	const showName = process.argv.slice(2).join(" ");
-	let fullPath = `${mainPathToShows}${showName}`;
-	if (!fs.existsSync(fullPath) || fullPath === mainPathToShows) {
-		console.error("Show not found, exiting");
+	const mainPathToShows = `${process.env.SHOW_PATH}` || "C:/Shows";
+    const splitBySeason = process.argv[2];
+	if (splitBySeason !== 'yes' && splitBySeason !== 'no') {
+		console.error("Please enter if show is split by season folders\nFormat is 'node index.js [split by season: yes/no] [folder name]'");
 		return;
+	}
+	const showName = process.argv.slice(3).join(" ");
+	if (showName.length < 1) {
+		console.error("Please enter show name\nFormat is 'node index.js [split by season: yes/no] [folder name]'");
+		return;
+	}
+	let fullPath = `${mainPathToShows}/${showName}`;
+	if (!fs.existsSync(fullPath)) {
+		console.error("Show not found, exiting\nFormat is 'node index.js [split by season: yes/no] [folder name]'");
+		return;
+	}
+	if (splitBySeason === 'no') { // reset fullpath if not split
+		fullPath = mainPathToShows;
 	}
 	console.log(`Show: ${fullPath}`);
 	try {
-		// get all folder directories (should be split by seasons)
-		const seasonsList = fs
-			.readdirSync(fullPath)
-			.filter((name) => fs.lstatSync(`${fullPath}/${name}`).isDirectory());
+		let seasonsList = [];
+		if (splitBySeason === 'yes') {
+			// get all folder directories (should be split by seasons)
+			seasonsList = fs
+				.readdirSync(fullPath)
+				.filter((name) => fs.lstatSync(`${fullPath}/${name}`).isDirectory());
+		} else {
+			seasonsList = [showName];
+		}
 		console.log(`Folders found:\n`, seasonsList);
 
 		// get list of episodes names (if have subtitle file with same name, skip)

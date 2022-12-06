@@ -15,7 +15,7 @@ create `.env` with SHOW_PATH to your main directory of shows
 # Usage
 
 ```
-npm start [insert folder name]
+npm start [Split by season: yes/no] [insert folder name] 
 ```
 
 # Extract all files to parent directory
